@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas-loading animation</title>
+
+    <style>
+        /*         body {
+            background-color: black;
+        }
+
+        canvas {
+            border: 1px solid white;
+        } */
+        body {
+            margin: 0;
+            /*  border-top: 0.001px solid transparent; 
+           /*hayalet border h1 için*/
+            padding-top: 0.1px;
+        }
+
+        h1 {
+            margin-top: 0;
+        }
+
+        .loading {
+            background-color: rgba(255, 255, 255, 0.7);
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* z-index: 999; */
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="loading">
+        <canvas width="400" height="400"></canvas>
+    </div>
+    <h1>Lorem, ipsum dolor.</h1>
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam qui saepe laudantium voluptatum reprehenderit ea
+        veritatis eaque consequatur, hic fugiat, itaque vero error maiores eos beatae exercitationem dolore nam, quod
+        fugit eum suscipit! Quisquam, perferendis exercitationem. Qui quam debitis eum quibusdam nisi, voluptates
+        sapiente nulla eveniet accusantium cupiditate consequuntur quis asperiores totam corporis, cumque velit
+        doloremque animi aut odit in explicabo dignissimos error! Rerum eius id aperiam placeat excepturi debitis
+        eligendi harum tempore minus ipsum earum nostrum sapiente, soluta quas voluptatem saepe deleniti quis alias, eum
+        libero dicta possimus eveniet inventore. Pariatur tempore dignissimos tempora iure recusandae nostrum facere
+        necessitatibus.</p>
+    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Hic, alias. Lorem ipsum dolor, sit amet consectetur
+        adipisicing elit. Totam minima, quisquam vitae at neque similique eos sed natus dolorum nisi excepturi optio
+        fugit iure modi ea commodi unde, eaque voluptatibus?</p>
+
+
+
+
+    <canvas width="400" height="400"></canvas>
+
+    <script>
+        const canvas = document.querySelector("canvas");
+        const ctx = canvas.getContext("2d");
+        //radian => 1PI = 180 derece ( radyan dönüştürme)
+        const sa = -Math.PI / 2; //start angel (radian )
+        let artis = 0.003;
+        let oran1 = 0;
+        let oran2 = 0;
+        let tur = 0;
+        let r = 50;
+        let kalinlik = 20;
+        ctx.strokeStyle = "black";
+
+
+        function arttirVeCiz() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.beginPath();
+            /*  
+                if (tur % 2 == 0)
+                oran2 += artis;
+                else
+                oran1 += artis; 
+            */
+
+            if (tur % 2 == 0)
+                oran2 = Math.min(oran2 + artis, 1);
+            else
+                oran1 = Math.min(oran1 + artis, 1);
+
+            ctx.arc(
+                canvas.width / 2,//200,    // x
+                canvas.height / 2,//200,    //y
+                r,//100,    //r: radius 
+                sa + Math.PI * 2 * oran1,   //start angel (radian)
+                sa + Math.PI * 2 * oran2    //end angel (radian)
+            );
+            ctx.lineWidth = kalinlik;
+            ctx.stroke();
+            requestAnimationFrame(arttirVeCiz);
+
+            /*if (oran1 >= 1) {
+            tur++;
+            oran2 = 0;
+            //ctx.strokeStyle = tur % 2 == 0 ? "green" : "yellow";
+            } */
+
+
+            // bitiş ilerliyor ve daire tamamlandıysa
+            if (tur % 2 == 0 && oran2 >= 1) {
+                tur++;
+                oran2 = 1;
+            }
+            if (tur % 2 != 0 && oran1 >= 1) {
+                tur++;
+                oran2 = 0;
+                oran1 = 0;
+            }
+        }
+        requestAnimationFrame(arttirVeCiz);
+        //setInterval(arttirVeCiz, 50);
+        //cizmeye müsaitse metodu çağır
+
+    </script>
+
+</body>
+
+</html>
